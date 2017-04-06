@@ -3,28 +3,30 @@
 The Keycloak Auth Proxy makes it possible to protect web resources that have no build in authentication.
 
 ## How is it working
+
+
 ```                                                                                                                                     
-+------------+                                                                                                                                          
-|            |                                                                                                                                          
-|  Internet  |                                                                                                                                          
-|            |                                                                                                                                          
-+------|-----+                                                                                                                                          
-       |                                                                                                                                                
-       |                                                                                                                                                
-       |                                                                                                                                                
-+------|-----+               +------------+                                                                                                             
-|            |               |            |                                                                                                             
-| Auth Proxy -----------------  Keycloak  |                                                                                                             
-|            |               |            |                                                                                                             
-+------|-----+               +------------+                                                                                                             
-       |                                                                                                                                                
-       |                                                                                                                                                
-       |                                                                                                                                                
-+------|-----+                                                                                                                                          
-|   Secured  |                                                                                                                                          
-|   Content  |                                                                                                                                          
-|            |                                                                                                                                          
-+------------+                                                                                                                           
++------------+ 
+|            | 
+|  Internet  |
+|            |
++------|-----+
+       |      
+       |      
+       |      
++------|-----+               +------------+    
+|            |               |            |
+| Auth Proxy -----------------  Keycloak  |
+|            |               |            |
++------|-----+               +------------+
+       |                                   
+       |                                   
+       |                                   
++------|-----+                             
+|   Secured  |                             
+|   Content  |                             
+|            |                             
++------------+                             
 ```
 
 ## Usecases
