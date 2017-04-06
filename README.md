@@ -24,7 +24,8 @@ The Keycloak Auth Proxy makes it possible to protect web resources that have no 
 |   Secured  |                                                                                                                                          
 |   Content  |                                                                                                                                          
 |            |                                                                                                                                          
-+------------+                                                                                                                           ```
++------------+                                                                                                                           
+```
 
 ## Usecases
 
