@@ -32,4 +32,4 @@ Despite the uniqueness of _keycloak-auth-proxy_ there are other project that sol
 <!-- Links -->
 
 [kcp]: https://github.com/keycloak/keycloak/tree/master/proxy
-[prx_diag]: docs/images/How_Keycloak_Auth_Proxy_works.svg
+[prx_diag]: https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/docs/images/How_Keycloak_Auth_Proxy_works.svg
