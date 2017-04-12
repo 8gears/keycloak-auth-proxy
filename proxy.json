@@ -1,0 +1,31 @@
+/*
+This is an sample proxy file config
+For more see: https://keycloak.gitbooks.io/documentation/server_installation/topics/proxy.html
+*/
+{
+  "target-url": "http://172.17.0.2:2015",
+  "bind-address": "0.0.0.0",
+  "http-port": "8080",
+  "applications": [
+    {
+      "base-path": "/",
+      "adapter-config": {
+        "realm": "horizon-docs",
+        "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmy26qnQkdzE9LtXsir1sgqCb914Iovt13TReQ6UDPGExQvsGidlkrLBKBf823n4sdG6PjVJBom7Hwj5yQkLEmYiGdFVLcecWa5SH0WYeWD/F2093cxc+B76EaetgvKRVtlDuW4M/2BIk+AAsJO6cxx4crafRE/Cg4yzZz6W/W7ztroGVg4TtylQnvnT4H9ybPsFd5D46QnqiLliahVdSXsQKhPp3gllqqdzUHe35TVjAU000UdXjK3ly68sRIrlN76DZVIitlYuJuHEP8snICJw1f21asuXRR6i7ywNBsl03dy1oCqlAIRboeRYZM52w4dgrTaGNUwx9J2aRBEAVawIDAQAB",
+        "auth-server-url": "http://keycloak.example.com/auth",
+        "ssl-required": "external",
+        "resource": "account",
+        "credentials": {
+          "secret": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        }
+      },
+      "constraints": [
+        {
+          "pattern": "/*",
+          "authenticate": true
+        }
+      ],
+      "proxy-address-forwarding": true
+    }
+  ]
+}
