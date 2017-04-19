@@ -1,0 +1,18 @@
+version: '2'
+services:
+  auth-proxy:
+    build: .
+    ports:
+     - "8080:80"
+    # This placeholder will be filled by the variables in the .env file. 
+    environment:     
+      TARGET_URL:
+      REALM:
+      REALM_PUBLIC_KEY:
+      AUTH_SERVER_URL:
+      RESOURCE:
+      SECRET:
+      
+
+        
+  

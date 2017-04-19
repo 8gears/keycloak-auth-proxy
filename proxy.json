@@ -1,6 +1,6 @@
 /*
-This is an sample proxy file config
-For more see: https://keycloak.gitbooks.io/documentation/server_installation/topics/proxy.html
+This is an Example of proxy file config that was generated from from the proxy.tmpl
+For more details regarding file format and meaning see: https://keycloak.gitbooks.io/documentation/server_installation/topics/proxy.html
 */
 {
   "target-url": "http://172.17.0.2:2015",

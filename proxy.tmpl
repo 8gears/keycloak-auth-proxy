@@ -1,16 +1,16 @@
 {
   "target-url": "{{ .Env.TARGET_URL }}",
   "bind-address": "0.0.0.0",
-  "http-port": "{{ default .Env.HTTP_PORT '80' }}",
+  "http-port": "{{ default .Env.HTTP_PORT "80" }}",
   "applications": [
     {
-      "base-path": "{{ default .Env.BASE_PATH '/' }}",
+      "base-path": "{{ default .Env.BASE_PATH "/" }}",
       "adapter-config": {
         "realm": "{{ .Env.REALM }}",
         "realm-public-key": "{{ .Env.REALM_PUBLIC_KEY }}",
         "auth-server-url": "{{ .Env.AUTH_SERVER_URL }}",
         "ssl-required": "external",
-        "resource": "{{ default .Env.RESOURCE 'account' }}",
+        "resource": "{{ default .Env.RESOURCE "account" }}",
         "credentials": {
           "secret": "{{ .Env.SECRET }}"
         }

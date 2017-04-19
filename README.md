@@ -1,8 +1,8 @@
 # Keycloak Auth Proxy
 
-The Keycloak Auth Proxy makes it possible to protect web resources that have no build in authentication.
+The Keycloak Auth Proxy provides authentication and authorization for web resources with OpenID Connect/OAuth, that have no build in authentication.
 
-This Auth Proxy Service uses [Keycloak Proxy][kcp] a Java/Undertow solution designed for Keycloak but that should work with any other IMA that support OpenID/Connect.
+This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak but that should also work with any other solution that supports OpenID/Connect.
 
 ## How is it working
 
@@ -16,10 +16,10 @@ This Auth Proxy Service uses [Keycloak Proxy][kcp] a Java/Undertow solution desi
 
 There are two very common use cases why one would use the Keycloak Auth Proxy together with an Identity & Access Management Service (IAM)
 
-- Protect static websites from unauthorized access only allowing authenticated users to see the content.  
+- Protect static websites from unauthorized access, allowing only authenticated users to see the content.  
   This is useful in combination with static website generator or other generated documentation.
-- Outsource the authentication/authorization to Keycloak Auth Proxy and just relay on the header parameter with username and grants which are forwarded to the upstream application.
-
+- Outsource the authentication/authorization step to Keycloak Auth Proxy and just relay on the forward HTTP headers with username/grants in the upstream application.   
+  This approach can be handy if you have an application, where there are no OpenID Connect library or if you don't won't perform to many changes in the application. 
 
 ## Usage 
 
@@ -42,7 +42,7 @@ Variables without default values are mandatory.
 - `AUTH_SERVER_URL` The auth server URL 
 - `RESOURCE` (default `account`) The resource to request aka client id
 - `SECRET` Credential secret
-- `CONSTRAINT_PATH` (default `/*`) You can define multiple path but they must be separated with a `;`
+- `CONSTRAINT_PATH` (default `/*`) You can define multiple path but they must be separated with an `;`
 
 ## Alternatives
 
