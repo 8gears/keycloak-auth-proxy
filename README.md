@@ -25,7 +25,18 @@ There are two very common use cases why one would use the Keycloak Auth Proxy to
 
 The proxy configuration settings can be set with environment variables or with the file `proxy.json` mounted as a volume to `/app/proxy.json`.
 
-The intended use is that for every service that needed authentication there is an dedicated auth proxy. Auth proxy can be configured to behave differently but not given the configuration via environment variable. 
+Set the mandatory environment variables.
+```
+docker-compose up
+```
+
+The intended use is, that every service that needs authentication has a dedicated auth proxy in front of it.
+However the Auth Proxy can be configured to behave differently, but not with the given the configuration via environment variable. 
+For this  case you have to mount the self created `proxy.json` for example.
+
+```
+docker run -v proxy.json:/app/proxy.json 8gears/keycloak-auth-proxy 
+```
 
 ## Environment Variables
 Can be used if you want to auth one service.
