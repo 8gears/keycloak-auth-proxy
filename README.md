@@ -1,6 +1,6 @@
 # Keycloak Auth Proxy
 
-The Keycloak Auth Proxy provides authentication and authorization for web resources with OpenID Connect/OAuth, that have no build in authentication.
+The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization too web resources that have no build in authentication.
 
 This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak but that should also work with any other solution that supports OpenID/Connect.
 
