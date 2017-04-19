@@ -48,6 +48,8 @@ Variables without default values are mandatory.
 
 Despite the uniqueness of _keycloak-auth-proxy_ there are other project that solve the similar problem differently.
 
+What makes this project special is, that it can be configured with environment variables and can be deployed and run on OpenShift. 
+
 - [OpenID / Keycloak Proxy service](https://github.com/gambol99/keycloak-proxy) This in Golang written proxy should work nicely with Keycloak and might be a value alternative to the current jvm proxy.
 - [OAuth2 Proxy](https://github.com/bitly/oauth2_proxy)
 - [Lua Resty OpenID/Connect](https://github.com/pingidentity/lua-resty-openidc) This library is designed for Nginx/OpenResty. 
