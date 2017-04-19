@@ -1,7 +1,7 @@
 {
   "target-url": "{{ .Env.TARGET_URL }}",
   "bind-address": "0.0.0.0",
-  "http-port": "{{ default .Env.HTTP_PORT "80" }}",
+  "http-port": "{{ default .Env.HTTP_PORT "8080" }}",
   "applications": [
     {
       "base-path": "{{ default .Env.BASE_PATH "/" }}",

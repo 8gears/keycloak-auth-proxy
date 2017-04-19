@@ -16,6 +16,6 @@ RUN apk --no-cache add ca-certificates openssl unzip &&\
     chmod 755 start-proxy.sh &&\
     chmod -R g+rwX /app    
 
-EXPOSE 80 443
+EXPOSE 8080 8443
 
 CMD ["/app/start-proxy.sh"]
