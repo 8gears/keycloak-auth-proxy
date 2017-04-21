@@ -55,11 +55,27 @@ Variables without default values are mandatory.
 - `SECRET` Credential secret
 - `CONSTRAINT_PATH` (default `/*`) You can define multiple path but they must be separated with an `;`
 
-## OpenShift Deployments
+## OpenShift Deployment
 
-In OpenShift you can create the service from the Template `openshift_template.yml` or import the template to the service catalog.
+In OpenShift you can create the service from the template `openshift_template.yml` by using the Web UI or CLI.
 
-### Template Service Catalog import
+Copy the content of `openshift_template.yml` and paste it to the *Import YAML / JSON* tab in the service catalog. 
+The OpenShift has a [detailed tutorial]([create_from_ui]) that covers the manual template instantiation.
+
+From the CLI execute the first command with the `--parameter` argument to get a list of all the possible parameters.
+Next in the second command add all the needed parameters and pipe it to create.
+
+```
+oc process --parameter -f https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/openshift_template.yml
+
+oc process -f https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/openshift_template.yml \
+    -p TARGET_URL=http://service-name:123 \
+    -p REALM=app42 \
+    | oc create -f -
+
+```
+
+### OpenShift Service Catalog import
 Import the template to the current namespace service catalog.
 
 ```
@@ -87,3 +103,4 @@ What makes this project special is, that it can be configured with environment v
 
 [kcp]: https://github.com/keycloak/keycloak/tree/master/proxy
 [prx_diag]: https://cdn.rawgit.com/8gears/keycloak-auth-proxy/master/docs/images/How_Keycloak_Auth_Proxy_works.svg
+[create_from_ui]: https://docs.openshift.org/latest/dev_guide/templates.html#creating-from-templates-using-the-web-console
