@@ -1,10 +1,12 @@
 # Keycloak Auth Proxy
 
-The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
+The Keycloak Auth Proxy Container provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
 
 This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak. However it should also work with any other OpenID Connect Provider.
 
-## How is it working
+What makes this project special is, that it can be configured with environment variables and can be easily deployed to Docker, Kubernetes or OpenShift. 
+
+## Mode of operation
 
 ![How reverse auth proxy works][prx_diag]
 
@@ -12,22 +14,31 @@ This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow sol
 2. The Auth Proxy work together with the IAM (Keycloak) and redirects the user to the IAM so the user can login.
 3.  After a successful login the proxy forwards the user to the protected content. According to proxy configuration setting the proxy checks if the user is allowed to access the path.
 
-## Use cases
+## Typical Use cases
 
-There are two very common use cases why one would use the Keycloak Auth Proxy together with an Identity & Access Management Service (IAM)
+There are two very common use cases why one would use the Keycloak Auth Proxy in combination with an Identity & Access Management Service (IAM).
 
 - Protect static websites from unauthorized access, allowing only authenticated users to see the content.  
   This is useful in combination with static website generator or other generated documentation.
 - Outsource the authentication/authorization step to Keycloak Auth Proxy and just relay on the forward HTTP headers with username/grants in the upstream application.   
   This approach can be handy if you have an application, where there are no OpenID Connect library or if you don't won't perform to many changes in the application. 
 
-## Usage 
+## Usage
 
 The proxy configuration settings can be set with environment variables or with the file `proxy.json` mounted as a volume to `/app/proxy.json`.
 
 Set the mandatory environment variables.
 ```
-docker-compose up
+docker run -ti \
+-e TARGET_URL=asdf \
+-e REALM="realm" \
+-e REALM_PUBLIC_KEY='pub'
+8gears/keycloak-auth-proxy
+```
+
+With Compose adapt the env variables an hit 
+```
+curl https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/docker-compose.yml | docker-compose -f - up
 ```
 
 The intended use is, that every service that needs authentication has a dedicated auth proxy in front of it.
@@ -46,7 +57,7 @@ See the file [proxy.tmpl](proxy.tmpl)
 Variables without default values are mandatory.
 
 - `TARGET_URL` The URL to forward the traffic through
-- `HTTP_PORT` (default `80`) The port to bind the Auth Proxy too
+- `HTTP_PORT` (default `8080`) The port to bind the Auth Proxy too
 - `BASE_PATH` (default `/` )
 - `REALM` Adapter config realm
 - `REALM_PUBLIC_KEY` Realm public key
@@ -93,7 +104,7 @@ oc create -f https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master
 
 Despite the uniqueness of _keycloak-auth-proxy_ there are other project that solve the similar problem differently.
 
-What makes this project special is, that it can be configured with environment variables and can be deployed and run on OpenShift. 
+
 
 - [OpenID / Keycloak Proxy service](https://github.com/gambol99/keycloak-proxy) This in Golang written proxy should work nicely with Keycloak and might be a value alternative to the current jvm proxy.
 - [OAuth2 Proxy](https://github.com/bitly/oauth2_proxy)
