@@ -1,0 +1,131 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: keycloak-auth-proxy
+  annotations:
+    "openshift.io/display-name": Reverse Authentication Proxy
+    description: |
+      The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization for web resources that have no build in authentication.
+    iconClass: fa fa-address-card-o
+    tags: "Authentication, Proxy, OIDC, OpenID, Reverse Proxy"
+
+parameters:
+- name: NAME 
+  displayName: Name  
+  value: keycloak-auth-proxy
+  description: The name of the service
+  required: false 
+- name: TARGET_URL 
+  displayName: Target URL
+  description: The URL of the downstream service where traffic will be forwared too.
+  value: http://service:8080
+  required: true 
+- name: BASE_PATH 
+  displayName: Base path
+  description: The base context root for the application. Must start with '/'
+  value: /
+  required: false   
+- name: REALM 
+  displayName: Authentication realm
+  description: The authentication realm from keykloak
+  value: horizon-docs
+  required: true   
+- name: REALM_PUBLIC_KEY 
+  displayName: Authentication realm public key
+  description: The authentication realm public key from keykloak  
+  required: true   
+- name: SECRET 
+  displayName: Secret
+  description: The client credential secret
+  required: true     
+- name: AUTH_SERVER_URL 
+  displayName: Authentication server
+  description: The URL of the keycloack authentication server
+  value: http://keycloak.apps.example.com/auth
+  required: true     
+- name: RESOURCE 
+  displayName: Client ID 
+  description: Specifies ID referenced in URI and tokens. For example 'my-client'. For SAML this is also the expected issuer value from authn requests
+  value: account
+  required: true        
+- name: CONSTRAINT_PATH 
+  displayName: Constraint Paths
+  description: URL pattern to match relative to the base-path of the application. Must start with '/' REQUIRED. You may only have one wildcard and it must come at the end of the pattern. Define multiple paths, but separate them with an `;`.
+  value: /*
+  required: false  
+
+objects:
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    ports:
+      - name: 8080-tcp
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
+    selector:
+      deploymentconfig: ${NAME}
+- kind: Route
+  apiVersion: v1  
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:    
+    to:
+      kind: Service
+      name: ${NAME}
+    tls:
+      termination: edge
+
+- kind: DeploymentConfig
+  apiVersion: v1  
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    strategy:
+      type: Rolling
+  
+    template:
+      metadata:        
+        labels:
+          app: ${NAME}
+          deploymentconfig: ${NAME}
+      spec:
+        containers:
+          - name: ${NAME}
+            image: 8gears/keycloak-auth-proxy:latest
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            env:
+              - name: TARGET_URL
+                value: ${TARGET_URL}
+              - name: BASE_PATH
+                value: ${BASE_PATH}
+              - name: REALM
+                value: ${REALM}
+              - name: REALM_PUBLIC_KEY
+                value: ${REALM_PUBLIC_KEY}
+              - name: SECRET
+                value: ${SECRET}
+              - name: AUTH_SERVER_URL
+                value: ${AUTH_SERVER_URL}
+              - name: RESOURCE
+                value: ${RESOURCE}
+              - name: CONSTRAINT_PATH
+                value: ${CONSTRAINT_PATH}
+            imagePullPolicy: Always
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+  

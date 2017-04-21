@@ -1,8 +1,8 @@
 # Keycloak Auth Proxy
 
-The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization too web resources that have no build in authentication.
+The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
 
-This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak but that should also work with any other solution that supports OpenID/Connect.
+This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak. However it should also work with any other OpenID Connect Provider.
 
 ## How is it working
 
@@ -49,11 +49,29 @@ Variables without default values are mandatory.
 - `HTTP_PORT` (default `80`) The port to bind the Auth Proxy too
 - `BASE_PATH` (default `/` )
 - `REALM` Adapter config realm
-- `REALM_PUBLIC_KEY`Realm public key
+- `REALM_PUBLIC_KEY` Realm public key
 - `AUTH_SERVER_URL` The auth server URL 
 - `RESOURCE` (default `account`) The resource to request aka client id
 - `SECRET` Credential secret
 - `CONSTRAINT_PATH` (default `/*`) You can define multiple path but they must be separated with an `;`
+
+## OpenShift Deployments
+
+In OpenShift you can create the service from the Template `openshift_template.yml` or import the template to the service catalog.
+
+### Template Service Catalog import
+Import the template to the current namespace service catalog.
+
+```
+oc create -f https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/openshift_template.yml
+```
+
+Import template to global service catalog, so all users in all namespaces can use that template.
+
+```
+oc create -f https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/openshift_template.yml -n openshift
+```
+
 
 ## Alternatives
 
