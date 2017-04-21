@@ -33,12 +33,14 @@ docker run -ti \
 -e TARGET_URL=asdf \
 -e REALM="realm" \
 -e REALM_PUBLIC_KEY='pub'
+-e .... \
 8gears/keycloak-auth-proxy
 ```
 
-With Compose adapt the env variables an hit 
+With Compose adapt the env variables in `docker-compose.yml` and hit:
 ```
-curl https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/docker-compose.yml | docker-compose -f - up
+wget https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/docker-compose.yml 
+docker-compose - up
 ```
 
 The intended use is, that every service that needs authentication has a dedicated auth proxy in front of it.
