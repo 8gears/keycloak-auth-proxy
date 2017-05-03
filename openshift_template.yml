@@ -53,6 +53,10 @@ parameters:
   description: URL pattern to match relative to the base-path of the application. Must start with '/' REQUIRED. You may only have one wildcard and it must come at the end of the pattern. Define multiple paths, but separate them with an `;`.
   value: /*
   required: false  
+- name: CONFIG_TMPL 
+  displayName: Configuration Template
+  description: Provide the complete content of a custom config template that should be used instead of the default one.  
+  required: false  
 
 objects:
 - kind: Service
@@ -125,6 +129,8 @@ objects:
                 value: ${RESOURCE}
               - name: CONSTRAINT_PATH
                 value: ${CONSTRAINT_PATH}
+              - name: CONFIG_TMPL
+                value: ${CONFIG_TMPL}
             imagePullPolicy: Always
         restartPolicy: Always
         terminationGracePeriodSeconds: 30

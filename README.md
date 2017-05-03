@@ -18,6 +18,8 @@ What makes this project special is, that it can be configured with environment v
 
 There are two very common use cases why one would use the Keycloak Auth Proxy in combination with an Identity & Access Management Service (IAM).
 
+It is recommended that every service that needs authentication has a dedicated auth proxy in front of it.
+
 - Protect static websites from unauthorized access, allowing only authenticated users to see the content.  
   This is useful in combination with static website generator or other generated documentation.
 - Outsource the authentication/authorization step to Keycloak Auth Proxy and just relay on the forward HTTP headers with username/grants in the upstream application.   
@@ -25,9 +27,15 @@ There are two very common use cases why one would use the Keycloak Auth Proxy in
 
 ## Usage
 
-The proxy configuration settings can be set with environment variables or with the file `proxy.json` mounted as a volume to `/app/proxy.json`.
+There are three ways how the proxy can be configured. 
+The proxy configuration settings can be set with environment variables,environment variables plus config template or with the file `proxy.json` mounted as a volume to `/app/proxy.json`.
 
-Set the mandatory environment variables.
+The option that you choose depend on the use case. For simple static website auth the default proxy template is sufficient. For more complex scenarios the custom Proxy Config Template is able cover all possible options.
+
+### Running with the default Proxy Config Template
+
+In the simplest case the only thing you need to do is to set the mandatory environment variables. Prior the execution the variables merged with the default proxy config and then the proxy application is started.
+
 ```
 docker run -ti \
 -e TARGET_URL=asdf \
@@ -37,15 +45,38 @@ docker run -ti \
 8gears/keycloak-auth-proxy
 ```
 
-With Compose adapt the env variables in `docker-compose.yml` and hit:
+With Docker Compose download the default docker-compose.yml 
 ```
 wget https://raw.githubusercontent.com/8gears/keycloak-auth-proxy/master/docker-compose.yml 
+```
+
+Adapt the mandatory env variables in `docker-compose.yml` and hit:
+```
 docker-compose - up
 ```
 
-The intended use is, that every service that needs authentication has a dedicated auth proxy in front of it.
-However the Auth Proxy can be configured to behave differently, but not with the given the configuration via environment variable. 
-For this  case you have to mount the self created `proxy.json` for example.
+### Running with custom Proxy Config Template
+
+In order to combine the simplicity of the environment variables with the flexibility of the custom proxy config it is possible to provide your own template.
+
+Take the existing `proxy.tmpl` from this repository and extended it to your need.
+When you are done with the template minfy the content and set the variable ??`PROXY_TMPL` with the content.
+
+```
+docker run -ti \
+-e PROXY_TMPL={"target-url": "http://172.17.0.2:2015","bind-address": "0.0.0.0", ....
+-e TARGET_URL=asdf \
+-e REALM="realm" \
+-e REALM_PUBLIC_KEY='pub'
+-e .... \
+8gears/keycloak-auth-proxy
+```
+
+### Running with custom Proxy Config 
+
+Write your `proxy.json` file and mount it to `/app/proxy.json`. Prior start the Auth proxy startup script will check if the file exist and start the proxy with the provided file ignoring the template or any provided environment variables.
+
+Instead of mapping you can provide the content via environment variable ?`PROXY_JSON` just like in the template example above.
 
 ```
 docker run -v proxy.json:/app/proxy.json 8gears/keycloak-auth-proxy 
@@ -67,6 +98,7 @@ Variables without default values are mandatory.
 - `RESOURCE` (default `account`) The resource to request aka client id
 - `SECRET` Credential secret
 - `CONSTRAINT_PATH` (default `/*`) You can define multiple path but they must be separated with an `;`
+- `PROXY_TMPL` Instead of using the provided proxy config it is possible to provide a custom config.
 
 ## OpenShift Deployment
 
