@@ -3,8 +3,8 @@ services:
   auth-proxy:
     build: .
     ports:
-     - "8080:80"
-    # This placeholder will be filled by the variables in the .env file. 
+     - "8080:8080"
+    # This placeholders should be overwritten with the .env file or environmenr variables
     environment:     
       TARGET_URL:
       REALM:
@@ -12,7 +12,8 @@ services:
       AUTH_SERVER_URL:
       RESOURCE:
       SECRET:
-      
-
-        
-  
+  # Demo Application      
+  demoapp:
+    image: vad1mo/hello-world-service
+    ports:
+      - "5050:5050"
