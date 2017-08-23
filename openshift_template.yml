@@ -35,8 +35,8 @@ parameters:
   value: :8080
   required: false   
 - name: ENABLE_REFRESH_TOKENS
-  displayName: Proxy Listen Port
-  description:  The interface definition you wish the proxy to listen, all interfaces is specified as ':<port>', unix sockets as unix://<REL_PATH>|</ABS PATH>
+  displayName: Refresh Token Enabled
+  description:  Enables the handling of the refresh tokens 
   value: 'true'
   required: false   
 - name: REDIRECTION_URL
@@ -118,7 +118,7 @@ objects:
       spec:
         containers:
           - name: ${NAME}
-            image: 8gears/keycloak-auth-proxy:go-proxy
+            image: 8gears/keycloak-auth-proxy:feature_go-proxy
             ports:
               - containerPort: 8080
                 protocol: TCP
