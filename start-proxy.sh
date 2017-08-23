@@ -6,12 +6,11 @@ if [ -n "$PROXY_CONFIG" ]; then
     export $PROXY_CONFIG_FILE=/opt/proxy.config
 fi
 
-if [-e "/opt/proxy.config" ]; then    
+vi if [-e "/opt/proxy.config" ]; then    
     /opt/keycloak-proxy --config $PROXY_CONFIG_FILE
 else
     ## parse ENV Vars    
     # $PROXY_DISCOVERY_URL
     # $PROXY_CLIENT_ID
-   /opt/keycloak-proxy --listen ":8080" --enable-refresh-tokens $PROXY_ENABLE_REFRESH_TOKEN --secure-cookie $PROXY_SECURE_COOKIE --resources $PROXY_RESOURCES
+   /opt/keycloak-proxy --listen :8080 --enable-refresh-tokens $PROXY_ENABLE_REFRESH_TOKEN --secure-cookie $PROXY_SECURE_COOKIE --resources $PROXY_RESOURCES
 fi
-
