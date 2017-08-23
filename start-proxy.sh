@@ -1,18 +1,18 @@
 #!/bin/sh
 
-if [ -n "$PROXY_JSON" ]; then
-    echo "Using the provided proxy json file"
-    echo $PROXY_JSON > /app/proxy.json
+if [ -n "$PROXY_CONFIG" ]; then
+    echo "Using the provided proxy json/yml file"
+    echo $PROXY_CONFIG > /opt/proxy.config
+    export $PROXY_CONFIG_FILE=/opt/proxy.config
 fi
 
-if [ -n "$PROXY_TMPL" ]; then
-    echo "Using the provided proxy template file"
-    echo $PROXY_TMPL > /app/proxy.tmpl
-fi
-
-if [ ! -e "/app/proxy.json" ]
+if [-e "/opt/proxy.config" ]
 then    
-    dockerize -template /app/proxy.tmpl:/app/proxy.json java -jar /app/bin/launcher.jar /app/proxy.json
+    /opt/keycloak-proxy --config $PROXY_CONFIG_FILE
 else
-    java -jar /app/bin/launcher.jar /app/proxy.json
+    ## parse ENV Vars    
+    # $PROXY_DISCOVERY_URL
+    # $PROXY_CLIENT_ID
+   /opt/keycloak-proxy --listen :8080 --enable-refresh-token: $PROXY_ENABLE_REFRESH_TOKEN --secure-cookie $PROXY_SECURE_COOKIE --resources ${PROXY_RESOURCES}
 fi
+
