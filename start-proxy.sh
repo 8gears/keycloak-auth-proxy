@@ -7,6 +7,9 @@ if [ -n "$PROXY_CONFIG" ]; then
     /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --config $PROXY_CONFIG_FILE 
 else
     echo "Starting proxy."    
-    echo "PROXY_SECURE_COOKIE=${PROXY_ENABLE_REFRESH_TOKEN: false}"
-   /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --listen :8080 --enable-refresh-tokens ${PROXY_ENABLE_REFRESH_TOKEN: false} --secure-cookie ${PROXY_SECURE_COOKIE: true} --resources $PROXY_RESOURCES
+   /opt/keycloak-proxy \
+        --verbose=${PROX_DEBUG:=false} \
+        --enable-refresh-tokens=${PROXY_ENABLE_REFRESH_TOKEN:=false} \
+        --secure-cookie=${PROXY_SECURE_COOKIE:=true} \
+        --resources=$PROXY_RESOURCES
 fi
