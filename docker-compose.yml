@@ -16,6 +16,6 @@ services:
       - PROXY_RESOURCES
   # Demo Application      
   demoapp:
-    image: vad1mo/hello-world-service
+    image: vad1mo/hello-world-rest
     ports:
       - "5050:5050"
