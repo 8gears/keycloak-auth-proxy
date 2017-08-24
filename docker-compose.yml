@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   auth-proxy:
     build: .
@@ -6,12 +6,16 @@ services:
      - "8080:8080"
     # This placeholders should be overwritten with the .env file or environmenr variables
     environment:     
-      TARGET_URL:
-      REALM:
-      REALM_PUBLIC_KEY:
-      AUTH_SERVER_URL:
-      RESOURCE:
-      SECRET:
+      - PROXY_DISCOVERY_URL
+      - PROXY_CLIENT_ID
+      - PROXY_CLIENT_SECRET
+      - PROXY_LISTEN
+      - PROXY_ENABLE_REFRESH_TOKEN
+      - PROXY_REDIRECTION_URL
+      - PROXY_SECURE_COOKIE
+      - PROXY_ENCRYPTION_KEY
+      - PROXY_UPSTREAM_URL
+      - PROXY_RESOURCES
   # Demo Application      
   demoapp:
     image: vad1mo/hello-world-service

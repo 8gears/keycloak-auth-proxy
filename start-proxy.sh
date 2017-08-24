@@ -1,16 +1,12 @@
 #!/bin/sh
 
 if [ -n "$PROXY_CONFIG" ]; then
-    echo "Using the provided proxy json/yml file"
+    echo "Starting proxy and using the provided proxy json/yml file."
     echo $PROXY_CONFIG > /opt/proxy.config
     export $PROXY_CONFIG_FILE=/opt/proxy.config
-fi
-
-vi if [-e "/opt/proxy.config" ]; then    
-    /opt/keycloak-proxy --config $PROXY_CONFIG_FILE
+    /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --config $PROXY_CONFIG_FILE 
 else
-    ## parse ENV Vars    
-    # $PROXY_DISCOVERY_URL
-    # $PROXY_CLIENT_ID
-   /opt/keycloak-proxy --listen :8080 --enable-refresh-tokens $PROXY_ENABLE_REFRESH_TOKEN --secure-cookie $PROXY_SECURE_COOKIE --resources $PROXY_RESOURCES
+    echo "Starting proxy."    
+    echo "PROXY_SECURE_COOKIE=${PROXY_ENABLE_REFRESH_TOKEN: false}"
+   /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --listen :8080 --enable-refresh-tokens ${PROXY_ENABLE_REFRESH_TOKEN: false} --secure-cookie ${PROXY_SECURE_COOKIE: true} --resources $PROXY_RESOURCES
 fi
