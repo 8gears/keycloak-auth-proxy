@@ -7,7 +7,8 @@ if [ -n "$PROXY_CONFIG" ]; then
     /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --config $PROXY_CONFIG_FILE 
 else
     echo "Starting proxy."    
-   /opt/keycloak-proxy \
+    export PROXY_LISTEN=${PROXY_LISTEN:-:8080}
+    /opt/keycloak-proxy \
         --verbose=${PROX_DEBUG:=false} \
         --enable-refresh-tokens=${PROXY_ENABLE_REFRESH_TOKEN:=false} \
         --secure-cookie=${PROXY_SECURE_COOKIE:=true} \
