@@ -42,11 +42,11 @@ parameters:
 - name: REDIRECTION_URL
   displayName: The redirect URL
   description:  Redirection url for the oauth callback url, defaults to host header is absent.
-  value: 
+  value:
   required: false
 - name: SECURE_COOKIE
   displayName: Secure Cookie
-  description:  enforces the cookie to be secure 
+  description:  Enforces the cookie to be secure. Works only with Secure redirect URL
   value: 'false'
   required: false  
 - name: ENCRYPTION_KEY
@@ -55,7 +55,7 @@ parameters:
   from: "[a-zA-Z0-9]{32}"
   generate: "expression"
 - name: UPSTREAM_URL
-  displayName: Secure Cookie
+  displayName: Upstrean URL
   description:  URL for the upstream endpoint you wish to proxy the traffic too.
   value: 'http://example.org/'
   required: true  
@@ -65,7 +65,7 @@ parameters:
   value: 'uri=/*'
   required: true
 - name: PROXY_CONFIG 
-  displayName: Configuration File
+  displayName: Proxy Configuration File
   description: Provide the complete content of a custom config file that should be used instead of the default one.  
   required: false  
 objects:
@@ -123,26 +123,26 @@ objects:
               - containerPort: 8080
                 protocol: TCP
             env:
-              - name: DISCOVERY_URL 
-                value: ${PROXY_DISCOVERY_URL}
-              - name: CLIENT_ID 
-                value: ${PROXY_CLIENT_ID}
-              - name: CLIENT_SECRET 
-                value: ${PROXY_CLIENT_SECRET}
-              - name: LISTEN
-                value: ${PROXY_LISTEN}
-              - name: ENABLE_REFRESH_TOKENS
-                value: ${PROXY_ENABLE_REFRESH_TOKENS}
-              - name: REDIRECTION_URL
-                value: ${PROXY_REDIRECTION_URL}
-              - name: SECURE_COOKIE
-                value: ${PROXY_SECURE_COOKIE}
-              - name: ENCRYPTION_KEY
-                value: ${PROXY_ENCRYPTION_KEY}
-              - name: UPSTREAM_URL
-                value: ${PROXY_UPSTREAM_URL}
-              - name: RESOURCES
-                value: ${PROXY_RESOURCES}
+              - name: PROXY_DISCOVERY_URL
+                value: ${DISCOVERY_URL}
+              - name: PROXY_CLIENT_ID 
+                value: ${CLIENT_ID}
+              - name: PROXY_CLIENT_SECRET
+                value: ${CLIENT_SECRET}              
+              - name: PROXY_LISTEN
+                value: ${LISTEN}
+              - name: PROXY_ENABLE_REFRESH_TOKENS
+                value: ${ENABLE_REFRESH_TOKENS}
+              - name: PROXY_REDIRECTION_URL
+                value: ${REDIRECTION_URL}
+              - name: PROXY_SECURE_COOKIE
+                value: ${SECURE_COOKIE}
+              - name: PROXY_ENCRYPTION_KEY
+                value: ${ENCRYPTION_KEY}
+              - name: PROXY_UPSTREAM_URL
+                value: ${UPSTREAM_URL}
+              - name: PROXY_RESOURCES
+                value: ${RESOURCES}
               - name: PROXY_CONFIG
                 value: ${PROXY_CONFIG}
             imagePullPolicy: Always
