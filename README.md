@@ -6,6 +6,11 @@ This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow sol
 
 What makes this project special is, that it can be configured with environment variables and can be easily deployed to Docker, Kubernetes or OpenShift. 
 
+## Note
+
+We are currently migrating the Java Proxy Version that comes with Keycloak to [gambol99/keycloak-proxy](https://github.com/gambol99/keycloak-proxy). You can switch to the branch [goproxy](/tree/goproxy).
+The Go Proxy implementation needs less resources and has some usefull options that many might need. (Let's Encrypt Support, Login/Logout and Forward Signing Proxy). A Working version is availible on Docker Hub as `docker pull 8gears/keycloak-auth-proxy:goproxy`
+
 ## Mode of operation
 
 ![How reverse auth proxy works][prx_diag]
