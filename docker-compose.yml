@@ -14,6 +14,7 @@ services:
       - PROXY_ENCRYPTION_KEY
       - PROXY_UPSTREAM_URL
       - PROXY_RESOURCES
+      - PROXY_MATCH_CLAIMS
   # Demo Application      
   demoapp:
     image: vad1mo/hello-world-rest

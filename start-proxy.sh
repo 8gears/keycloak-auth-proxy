@@ -3,15 +3,17 @@
 if [ -n "$PROXY_CONFIG" ]; then
     echo "Starting proxy and using the provided proxy json/yml file."
     echo $PROXY_CONFIG > /opt/proxy.config
-    export $PROXY_CONFIG_FILE=/opt/proxy.config
+    export PROXY_CONFIG_FILE=/opt/proxy.config
     /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --config $PROXY_CONFIG_FILE 
 else
+    if [ -n "$PROXY_MATCH_CLAIMS" ];then
+        export PROXY_MATCH_CLAIM="--match-claims=$PROXY_MATCH_CLAIMS"
+    fi
     echo "Starting proxy."    
     export PROXY_LISTEN=${PROXY_LISTEN:-:8080}
     /opt/keycloak-proxy \
         --verbose=${PROX_DEBUG:=false} \
         --enable-refresh-tokens=${PROXY_ENABLE_REFRESH_TOKEN:=false} \
         --secure-cookie=${PROXY_SECURE_COOKIE:=true} \
-        --resources=$PROXY_RESOURCES \
-        --match-claims=$PROXY_MATCH_CLAIMS
+        --resources=$PROXY_RESOURCES $PROXY_MATCH_CLAIM
 fi
