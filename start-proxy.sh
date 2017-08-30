@@ -12,5 +12,6 @@ else
         --verbose=${PROX_DEBUG:=false} \
         --enable-refresh-tokens=${PROXY_ENABLE_REFRESH_TOKEN:=false} \
         --secure-cookie=${PROXY_SECURE_COOKIE:=true} \
-        --resources=$PROXY_RESOURCES
+        --resources=$PROXY_RESOURCES \
+        --match-claims=$PROXY_MATCH_CLAIMS
 fi
