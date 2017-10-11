@@ -6,7 +6,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/8gears/keycloak-auth-proxy.svg?style=flat-square)](https://hub.docker.com/r/8gears/keycloak-auth-proxy/)
 
 
-The Keycloak Auth Proxy Container provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
+The Reverse Auth Proxy Container provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
 
 This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak. However it should also work with any other OpenID Connect Provider.
 
@@ -14,8 +14,8 @@ What makes this project special is, that it can be configured with environment v
 
 ## Note
 
-We are currently migrating the Java Proxy Version that comes with Keycloak to [gambol99/keycloak-proxy](https://github.com/gambol99/keycloak-proxy). You can switch to the branch [goproxy](/tree/goproxy).
-The Go Proxy implementation needs less resources and has some usefull options that many might need. (Let's Encrypt Support, Login/Logout and Forward Signing Proxy). A Working version is availible on Docker Hub as `docker pull 8gears/keycloak-auth-proxy:goproxy`
+We are migrating the Java Proxy Version (that comes with Keycloak) to [gambol99/keycloak-proxy](https://github.com/gambol99/keycloak-proxy). You can switch to the branch [goproxy](/tree/goproxy).
+The new Go Proxy implementation is more general purpose, needs less resources and has some usefull options that are missing in the Keycloak version. (Let's Encrypt Support, Login/Logout and Forward Signing Proxy). A Working version is availible on Docker Hub as `docker pull 8gears/keycloak-auth-proxy:goproxy`
 
 ## Mode of operation
 
