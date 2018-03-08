@@ -1,12 +1,13 @@
 # Keycloak Auth Proxy
 
-[![Anchore Image Overview](https://anchore.io/service/badges/image/2387ff5c51f57a1b6e7cffc65f400bf47a9962bd57dea8a050cf7f941937bd17)](https://anchore.io/image/dockerhub/2387ff5c51f57a1b6e7cffc65f400bf47a9962bd57dea8a050cf7f941937bd17?repo=8gears%2Fkeycloak-auth-proxy&tag=goproxy)
 [![Docker Automated build](https://img.shields.io/docker/automated/8gears/keycloak-auth-proxy.svg?style=flat-square)](https://hub.docker.com/r/8gears/keycloak-auth-proxy/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/8gears/keycloak-auth-proxy.svg?style=flat-square)](https://hub.docker.com/r/8gears/keycloak-auth-proxy/)
 [![Docker Stars](https://img.shields.io/docker/stars/8gears/keycloak-auth-proxy.svg?style=flat-square)](https://hub.docker.com/r/8gears/keycloak-auth-proxy/)
+[![MicroBadger Size](https://img.shields.io/microbadger/image-size/8gears/keycloak-auth-proxy.svg?style=flat-square)](https://hub.docker.com/r/8gears/keycloak-auth-proxy/)
 
 
-The Reverse Auth Proxy Container provides OpenID Connect/OAuth authentication and authorization for web resources or services that don't have a build in authentication.
+
+The Reverse Auth Proxy in a Docker Container the provides OpenID Connect/OAuth authentication and authorization for HTTP services that that can't or won't do it themself.
 
 This Auth Proxy Service uses [Keycloak Proxy][kcp], which is a Java/Undertow solution designed for Keycloak. However it should also work with any other OpenID Connect Provider.
 
