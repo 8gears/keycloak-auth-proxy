@@ -15,49 +15,59 @@ parameters:
   value: keycloak-auth-proxy
   description: The name of the service
   required: false 
-- name: TARGET_URL 
-  displayName: Target URL
-  description: The URL of the downstream service where traffic will be forwared too.
-  value: http://service:8080
+- name: DISCOVERY_URL 
+  displayName: Discovery URL
+  description:  Discovery url to retrieve the openid configuration.  Normally for keycloak its <server>/auth/realm/<realm_name>
+  value: https://auth.domain.io/auth/realms/8gears
   required: true 
-- name: BASE_PATH 
-  displayName: Base path
-  description: The base context root for the application. Must start with '/'
-  value: /
-  required: false   
-- name: REALM 
-  displayName: Authentication realm
-  description: The authentication realm from keykloak
-  value: horizon-docs
-  required: true   
-- name: REALM_PUBLIC_KEY 
-  displayName: Authentication realm public key
-  description: The authentication realm public key from keykloak  
-  required: true   
-- name: SECRET 
-  displayName: Secret
-  description: The client credential secret
-  required: true     
-- name: AUTH_SERVER_URL 
-  displayName: Authentication server
-  description: The URL of the keycloack authentication server
-  value: http://keycloak.apps.example.com/auth
-  required: true     
-- name: RESOURCE 
+- name: CLIENT_ID 
   displayName: Client ID 
   description: Specifies ID referenced in URI and tokens. For example 'my-client'. For SAML this is also the expected issuer value from authn requests
   value: account
-  required: true        
-- name: CONSTRAINT_PATH 
-  displayName: Constraint Paths
-  description: URL pattern to match relative to the base-path of the application. Must start with '/' REQUIRED. You may only have one wildcard and it must come at the end of the pattern. Define multiple paths, but separate them with an `;`.
-  value: /*
+  required: true  
+- name: CLIENT_SECRET 
+  displayName: Client Secret
+  description: Client secret used to authenticate to the oauth service
+  required: true           
+- name: LISTEN
+  displayName: Proxy Listen Port
+  description:  The interface definition you wish the proxy to listen, all interfaces is specified as ':<port>', unix sockets as unix://<REL_PATH>|</ABS PATH>
+  value: :8080
+  required: false   
+- name: ENABLE_REFRESH_TOKENS
+  displayName: Refresh Token Enabled
+  description:  Enables the handling of the refresh tokens 
+  value: 'true'
+  required: false   
+- name: REDIRECTION_URL
+  displayName: The redirect URL
+  description:  Redirection url for the oauth callback url, defaults to host header is absent.
+  value:
+  required: false
+- name: SECURE_COOKIE
+  displayName: Secure Cookie
+  description:  Enforces the cookie to be secure. Works only with Secure redirect URL
+  value: 'false'
   required: false  
-- name: CONFIG_TMPL 
-  displayName: Configuration Template
-  description: Provide the complete content of a custom config template that should be used instead of the default one.  
+- name: ENCRYPTION_KEY
+  displayName: Encryption key
+  description:  Encryption key used to encryption the session state  
+  from: "[a-zA-Z0-9]{32}"
+  generate: "expression"
+- name: UPSTREAM_URL
+  displayName: Upstrean URL
+  description:  URL for the upstream endpoint you wish to proxy the traffic too.
+  value: 'http://example.org/'
+  required: true  
+- name: RESOURCES
+  displayName: Resources
+  description:  list of resources 'uri=/admin|methods=GET,PUT|roles=role1,role2'
+  value: 'uri=/*'
+  required: true
+- name: PROXY_CONFIG 
+  displayName: Proxy Configuration File
+  description: Provide the complete content of a custom config file that should be used instead of the default one.  
   required: false  
-
 objects:
 - kind: Service
   apiVersion: v1
@@ -108,29 +118,33 @@ objects:
       spec:
         containers:
           - name: ${NAME}
-            image: 8gears/keycloak-auth-proxy:latest
+            image: 8gears/keycloak-auth-proxy:goproxy
             ports:
               - containerPort: 8080
                 protocol: TCP
             env:
-              - name: TARGET_URL
-                value: ${TARGET_URL}
-              - name: BASE_PATH
-                value: ${BASE_PATH}
-              - name: REALM
-                value: ${REALM}
-              - name: REALM_PUBLIC_KEY
-                value: ${REALM_PUBLIC_KEY}
-              - name: SECRET
-                value: ${SECRET}
-              - name: AUTH_SERVER_URL
-                value: ${AUTH_SERVER_URL}
-              - name: RESOURCE
-                value: ${RESOURCE}
-              - name: CONSTRAINT_PATH
-                value: ${CONSTRAINT_PATH}
-              - name: CONFIG_TMPL
-                value: ${CONFIG_TMPL}
+              - name: PROXY_DISCOVERY_URL
+                value: ${DISCOVERY_URL}
+              - name: PROXY_CLIENT_ID 
+                value: ${CLIENT_ID}
+              - name: PROXY_CLIENT_SECRET
+                value: ${CLIENT_SECRET}              
+              - name: PROXY_LISTEN
+                value: ${LISTEN}
+              - name: PROXY_ENABLE_REFRESH_TOKENS
+                value: ${ENABLE_REFRESH_TOKENS}
+              - name: PROXY_REDIRECTION_URL
+                value: ${REDIRECTION_URL}
+              - name: PROXY_SECURE_COOKIE
+                value: ${SECURE_COOKIE}
+              - name: PROXY_ENCRYPTION_KEY
+                value: ${ENCRYPTION_KEY}
+              - name: PROXY_UPSTREAM_URL
+                value: ${UPSTREAM_URL}
+              - name: PROXY_RESOURCES
+                value: ${RESOURCES}
+              - name: PROXY_CONFIG
+                value: ${PROXY_CONFIG}
             imagePullPolicy: Always
         restartPolicy: Always
         terminationGracePeriodSeconds: 30

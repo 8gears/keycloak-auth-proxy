@@ -1,18 +1,19 @@
 #!/bin/sh
 
-if [ -n "$PROXY_JSON" ]; then
-    echo "Using the provided proxy json file"
-    echo $PROXY_JSON > /app/proxy.json
-fi
-
-if [ -n "$PROXY_TMPL" ]; then
-    echo "Using the provided proxy template file"
-    echo $PROXY_TMPL > /app/proxy.tmpl
-fi
-
-if [ ! -e "/app/proxy.json" ]
-then    
-    dockerize -template /app/proxy.tmpl:/app/proxy.json java -jar /app/bin/launcher.jar /app/proxy.json
+if [ -n "$PROXY_CONFIG" ]; then
+    echo "Starting proxy and using the provided proxy json/yml file."
+    echo $PROXY_CONFIG > /opt/proxy.config
+    export PROXY_CONFIG_FILE=/opt/proxy.config
+    /opt/keycloak-proxy --verbose ${PROX_DEBUG: false} --config $PROXY_CONFIG_FILE 
 else
-    java -jar /app/bin/launcher.jar /app/proxy.json
+    if [ -n "$PROXY_MATCH_CLAIMS" ];then
+        export PROXY_MATCH_CLAIM="--match-claims=$PROXY_MATCH_CLAIMS"
+    fi
+    echo "Starting proxy."    
+    export PROXY_LISTEN=${PROXY_LISTEN:-:8080}
+    /opt/keycloak-proxy \
+        --verbose=${PROX_DEBUG:=false} \
+        --enable-refresh-tokens=${PROXY_ENABLE_REFRESH_TOKEN:=false} \
+        --secure-cookie=${PROXY_SECURE_COOKIE:=true} \
+        --resources=$PROXY_RESOURCES $PROXY_MATCH_CLAIM
 fi
