@@ -3,149 +3,148 @@ apiVersion: v1
 metadata:
   name: keycloak-auth-proxy
   annotations:
-    "openshift.io/display-name": Reverse Authentication Proxy
+    'openshift.io/display-name': Reverse Authentication Proxy
     description: |
       The Keycloak Auth Proxy provides OpenID Connect/OAuth authentication and authorization for web resources that have no build in authentication.
     iconClass: fa fa-address-card-o
-    tags: "Authentication, Proxy, OIDC, OpenID, Reverse Proxy"
+    tags: 'Authentication, Proxy, OIDC, OpenID, Reverse Proxy'
 
 parameters:
-- name: NAME 
-  displayName: Name  
-  value: keycloak-auth-proxy
-  description: The name of the service
-  required: false 
-- name: DISCOVERY_URL 
-  displayName: Discovery URL
-  description:  Discovery url to retrieve the openid configuration.  Normally for keycloak its <server>/auth/realm/<realm_name>
-  value: https://auth.domain.io/auth/realms/8gears
-  required: true 
-- name: CLIENT_ID 
-  displayName: Client ID 
-  description: Specifies ID referenced in URI and tokens. For example 'my-client'. For SAML this is also the expected issuer value from authn requests
-  value: account
-  required: true  
-- name: CLIENT_SECRET 
-  displayName: Client Secret
-  description: Client secret used to authenticate to the oauth service
-  required: true           
-- name: LISTEN
-  displayName: Proxy Listen Port
-  description:  The interface definition you wish the proxy to listen, all interfaces is specified as ':<port>', unix sockets as unix://<REL_PATH>|</ABS PATH>
-  value: :8080
-  required: false   
-- name: ENABLE_REFRESH_TOKENS
-  displayName: Refresh Token Enabled
-  description:  Enables the handling of the refresh tokens 
-  value: 'true'
-  required: false   
-- name: REDIRECTION_URL
-  displayName: The redirect URL
-  description:  Redirection url for the oauth callback url, defaults to host header is absent.
-  value:
-  required: false
-- name: SECURE_COOKIE
-  displayName: Secure Cookie
-  description:  Enforces the cookie to be secure. Works only with Secure redirect URL
-  value: 'false'
-  required: false  
-- name: ENCRYPTION_KEY
-  displayName: Encryption key
-  description:  Encryption key used to encryption the session state  
-  from: "[a-zA-Z0-9]{32}"
-  generate: "expression"
-- name: UPSTREAM_URL
-  displayName: Upstrean URL
-  description:  URL for the upstream endpoint you wish to proxy the traffic too.
-  value: 'http://example.org/'
-  required: true  
-- name: RESOURCES
-  displayName: Resources
-  description:  list of resources 'uri=/admin|methods=GET,PUT|roles=role1,role2'
-  value: 'uri=/*'
-  required: true
-- name: PROXY_CONFIG 
-  displayName: Proxy Configuration File
-  description: Provide the complete content of a custom config file that should be used instead of the default one.  
-  required: false  
+  - name: NAME
+    displayName: Name
+    value: keycloak-auth-proxy
+    description: The name of the service
+    required: false
+  - name: DISCOVERY_URL
+    displayName: Discovery URL
+    description: Discovery url to retrieve the openid configuration.  Normally for keycloak its <server>/auth/realm/<realm_name>
+    value: https://auth.domain.io/auth/realms/8gears
+    required: true
+  - name: CLIENT_ID
+    displayName: Client ID
+    description: Specifies ID referenced in URI and tokens. For example 'my-client'. For SAML this is also the expected issuer value from authn requests
+    value: account
+    required: true
+  - name: CLIENT_SECRET
+    displayName: Client Secret
+    description: Client secret used to authenticate to the oauth service
+    required: true
+  - name: LISTEN
+    displayName: Proxy Listen Port
+    description: The interface definition you wish the proxy to listen, all interfaces is specified as ':<port>', unix sockets as unix://<REL_PATH>|</ABS PATH>
+    value: :8080
+    required: false
+  - name: ENABLE_REFRESH_TOKENS
+    displayName: Refresh Token Enabled
+    description: Enables the handling of the refresh tokens
+    value: 'true'
+    required: false
+  - name: REDIRECTION_URL
+    displayName: The redirect URL
+    description: Redirection url for the oauth callback url, defaults to host header is absent.
+    ? value
+    required: false
+  - name: SECURE_COOKIE
+    displayName: Secure Cookie
+    description: Enforces the cookie to be secure. Works only with Secure redirect URL
+    value: 'false'
+    required: false
+  - name: ENCRYPTION_KEY
+    displayName: Encryption key
+    description: Encryption key used to encryption the session state
+    from: '[a-zA-Z0-9]{32}'
+    generate: 'expression'
+  - name: UPSTREAM_URL
+    displayName: Upstrean URL
+    description: URL for the upstream endpoint you wish to proxy the traffic too.
+    value: 'http://example.org/'
+    required: true
+  - name: RESOURCES
+    displayName: Resources
+    description: list of resources 'uri=/admin|methods=GET,PUT|roles=role1,role2'
+    value: 'uri=/*'
+    required: true
+  - name: PROXY_CONFIG
+    displayName: Proxy Configuration File
+    description: Provide the complete content of a custom config file that should be used instead of the default one.
+    required: false
 objects:
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${NAME}
-    labels:
-      app: ${NAME}
-  spec:
-    ports:
-      - name: 8080-tcp
-        protocol: TCP
-        port: 8080
-        targetPort: 8080
-    selector:
-      deploymentconfig: ${NAME}
-- kind: Route
-  apiVersion: v1  
-  metadata:
-    name: ${NAME}
-    labels:
-      app: ${NAME}
-  spec:    
-    to:
-      kind: Service
+  - kind: Service
+    apiVersion: v1
+    metadata:
       name: ${NAME}
-    tls:
-      termination: edge
+      labels:
+        app: ${NAME}
+    spec:
+      ports:
+        - name: 8080-tcp
+          protocol: TCP
+          port: 8080
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${NAME}
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}
+      labels:
+        app: ${NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${NAME}
+      tls:
+        termination: edge
 
-- kind: DeploymentConfig
-  apiVersion: v1  
-  metadata:
-    name: ${NAME}
-    labels:
-      app: ${NAME}
-  spec:
-    replicas: 1
-    selector:
-      app: ${NAME}
-      deploymentconfig: ${NAME}
-    strategy:
-      type: Rolling
-  
-    template:
-      metadata:        
-        labels:
-          app: ${NAME}
-          deploymentconfig: ${NAME}
-      spec:
-        containers:
-          - name: ${NAME}
-            image: 8gears/keycloak-auth-proxy:goproxy
-            ports:
-              - containerPort: 8080
-                protocol: TCP
-            env:
-              - name: PROXY_DISCOVERY_URL
-                value: ${DISCOVERY_URL}
-              - name: PROXY_CLIENT_ID 
-                value: ${CLIENT_ID}
-              - name: PROXY_CLIENT_SECRET
-                value: ${CLIENT_SECRET}              
-              - name: PROXY_LISTEN
-                value: ${LISTEN}
-              - name: PROXY_ENABLE_REFRESH_TOKENS
-                value: ${ENABLE_REFRESH_TOKENS}
-              - name: PROXY_REDIRECTION_URL
-                value: ${REDIRECTION_URL}
-              - name: PROXY_SECURE_COOKIE
-                value: ${SECURE_COOKIE}
-              - name: PROXY_ENCRYPTION_KEY
-                value: ${ENCRYPTION_KEY}
-              - name: PROXY_UPSTREAM_URL
-                value: ${UPSTREAM_URL}
-              - name: PROXY_RESOURCES
-                value: ${RESOURCES}
-              - name: PROXY_CONFIG
-                value: ${PROXY_CONFIG}
-            imagePullPolicy: Always
-        restartPolicy: Always
-        terminationGracePeriodSeconds: 30
-  
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${NAME}
+      labels:
+        app: ${NAME}
+    spec:
+      replicas: 1
+      selector:
+        app: ${NAME}
+        deploymentconfig: ${NAME}
+      strategy:
+        type: Rolling
+
+      template:
+        metadata:
+          labels:
+            app: ${NAME}
+            deploymentconfig: ${NAME}
+        spec:
+          containers:
+            - name: ${NAME}
+              image: 8gears/keycloak-auth-proxy:2.1.1
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              env:
+                - name: PROXY_DISCOVERY_URL
+                  value: ${DISCOVERY_URL}
+                - name: PROXY_CLIENT_ID
+                  value: ${CLIENT_ID}
+                - name: PROXY_CLIENT_SECRET
+                  value: ${CLIENT_SECRET}
+                - name: PROXY_LISTEN
+                  value: ${LISTEN}
+                - name: PROXY_ENABLE_REFRESH_TOKENS
+                  value: ${ENABLE_REFRESH_TOKENS}
+                - name: PROXY_REDIRECTION_URL
+                  value: ${REDIRECTION_URL}
+                - name: PROXY_SECURE_COOKIE
+                  value: ${SECURE_COOKIE}
+                - name: PROXY_ENCRYPTION_KEY
+                  value: ${ENCRYPTION_KEY}
+                - name: PROXY_UPSTREAM_URL
+                  value: ${UPSTREAM_URL}
+                - name: PROXY_RESOURCES
+                  value: ${RESOURCES}
+                - name: PROXY_CONFIG
+                  value: ${PROXY_CONFIG}
+              imagePullPolicy: Always
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
