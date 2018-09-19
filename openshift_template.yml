@@ -154,8 +154,8 @@ objects:
                   value: ${RESOURCES}
                 - name: PROXY_CONFIG
                   value: ${PROXY_CONFIG}
-                - name: MATCH_CLAIMS
-                  value: ${PROXY_MATCH_CLAIMS}
+                - name: PROXY_MATCH_CLAIMS
+                  value: ${MATCH_CLAIMS}
               imagePullPolicy: Always
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
