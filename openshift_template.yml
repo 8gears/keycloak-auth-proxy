@@ -118,7 +118,7 @@ objects:
         spec:
           containers:
             - name: ${NAME}
-              image: 8gears/keycloak-auth-proxy:2.1.1
+              image: 8gears/keycloak-auth-proxy:2.1.2
               ports:
                 - containerPort: 8080
                   protocol: TCP
