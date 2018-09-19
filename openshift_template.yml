@@ -68,6 +68,10 @@ parameters:
     displayName: Proxy Configuration File
     description: Provide the complete content of a custom config file that should be used instead of the default one.
     required: false
+  - name: MATCH_CLAIMS
+    displayName: Token claim matching for additional ACL controls
+    description: eypair values for matching access token claims e.g. aud=myapp, iss=http://example.*, email=^.*@domain.com$
+    required: false
 objects:
   - kind: Service
     apiVersion: v1
