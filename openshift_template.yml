@@ -47,7 +47,6 @@ parameters:
   - name: REDIRECTION_URL
     displayName: The redirect URL
     description: Redirection url for the oauth callback url, defaults to host header is absent.
-    ? value
     required: false
   - name: SECURE_COOKIE
     displayName: Secure Cookie
