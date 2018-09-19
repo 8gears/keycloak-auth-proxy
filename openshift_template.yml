@@ -83,6 +83,7 @@ objects:
       name: ${NAME}
       labels:
         app: ${APP_NAME}
+        app-component: ${NAME}
     spec:
       ports:
         - name: 8080-tcp
@@ -97,6 +98,7 @@ objects:
       name: ${NAME}
       labels:
         app: ${APP_NAME}
+        app-component: ${NAME}
     spec:
       to:
         kind: Service
@@ -110,6 +112,7 @@ objects:
       name: ${NAME}
       labels:
         app: ${APP_NAME}
+        app-component: ${NAME}
     spec:
       replicas: 1
       selector:
@@ -122,6 +125,7 @@ objects:
         metadata:
           labels:
             app: ${APP_NAME}
+            app-component: ${NAME}
             deploymentconfig: ${NAME}
         spec:
           containers:
