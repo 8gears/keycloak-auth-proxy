@@ -21,9 +21,9 @@ parameters:
     description: The application name, by default same as name.
     required: false
   - name: HOST_NAME
-    displayName: The Host name
+    displayName: The external proxy host name
     value: HOST_NAME
-    description: The FQDN Domain name
+    description: The full qualified external proxy host name
     required: false
   - name: DISCOVERY_URL
     displayName: Discovery URL
