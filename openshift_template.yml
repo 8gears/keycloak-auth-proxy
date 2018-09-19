@@ -15,6 +15,11 @@ parameters:
     value: keycloak-auth-proxy
     description: The name of the service
     required: false
+  - name: APP_NAME
+    displayName: The App Name
+    value: keycloak-auth-proxy
+    description: The application name, by default same as name.
+    required: false
   - name: DISCOVERY_URL
     displayName: Discovery URL
     description: Discovery url to retrieve the openid configuration.  Normally for keycloak its <server>/auth/realm/<realm_name>
@@ -78,7 +83,7 @@ objects:
     metadata:
       name: ${NAME}
       labels:
-        app: ${NAME}
+        app: ${APP_NAME}
     spec:
       ports:
         - name: 8080-tcp
@@ -92,7 +97,7 @@ objects:
     metadata:
       name: ${NAME}
       labels:
-        app: ${NAME}
+        app: ${APP_NAME}
     spec:
       to:
         kind: Service
@@ -105,11 +110,11 @@ objects:
     metadata:
       name: ${NAME}
       labels:
-        app: ${NAME}
+        app: ${APP_NAME}
     spec:
       replicas: 1
       selector:
-        app: ${NAME}
+        app: ${APP_NAME}
         deploymentconfig: ${NAME}
       strategy:
         type: Rolling
@@ -117,7 +122,7 @@ objects:
       template:
         metadata:
           labels:
-            app: ${NAME}
+            app: ${APP_NAME}
             deploymentconfig: ${NAME}
         spec:
           containers:
